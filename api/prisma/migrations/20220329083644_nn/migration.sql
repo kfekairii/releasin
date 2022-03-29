@@ -1,4 +1,0 @@
--- AlterTable
-ALTER TABLE "AttributeValue" ALTER COLUMN "boolean" DROP NOT NULL,
-ALTER COLUMN "date" DROP NOT NULL,
-ALTER COLUMN "name" DROP NOT NULL;

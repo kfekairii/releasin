@@ -10,33 +10,44 @@ datasource db {
 // Models
 
 model Product {
-  id                 Int      @id @default(autoincrement())
-  name               String   @unique
-  created_at         DateTime @default(now())
-  productType_id     Int
-  assignedAttributes Int[]
+  id                 Int                 @id @default(autoincrement())
+  name               String              @unique
+  created_at         DateTime            @default(now())
+  productType        ProductType?        @relation(fields: [productTypeId], references: [id])
+  assignedAttributes AssignedAttribute[] @relation()
+  productTypeId      Int?
 }
 
 model ProductType {
-  id         Int      @id @default(autoincrement())
-  name       String   
-  created_at DateTime @default(now())
-  attributes Attribute[]
+  id           Int         @id @default(autoincrement())
+  name         String
+  created_at   DateTime    @default(now())
+  attributes   Attribute[] @relation()
+  attribute_id Int?
+
+
+  Product Product[]
 }
 
 model Attribute {
   id                Int                   @id @default(autoincrement())
   name              String                @unique
   type              AttributeValueOptions
-  attributeValue_id Int
+  attributeValue    AttributeValue?       @relation(fields: [attributeValue_id], references: [id])
+  attributeValue_id Int?                  @unique
 
-  productType ProductType? @relation(fields: [productType_id],references: [id])
-  productType_id Int?
+  productType   ProductType? @relation(fields: [productTypeId], references: [id])
+  productTypeId Int?
 }
 
 model AssignedAttribute {
-  id                Int @id @default(autoincrement())
-  attributeValue_id Int
+  id Int @id @default(autoincrement())
+
+  attributeValue AttributeValue? @relation(fields: [attributeValueId], references: [id])
+
+  Product          Product? @relation(fields: [productId], references: [id])
+  productId        Int?
+  attributeValueId Int?
 }
 
 model AttributeValue {
@@ -44,6 +55,11 @@ model AttributeValue {
   name    String[]
   boolean Boolean?
   date    DateTime?
+
+  attribute Attribute?
+
+
+  AssignedAttribute AssignedAttribute[]
 }
 
 enum AttributeValueOptions {

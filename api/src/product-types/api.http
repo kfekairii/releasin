@@ -4,9 +4,9 @@ POST http://localhost/api/product-types/attributes HTTP/1.1
 content-type: application/json
 
 {
-    "name": "Att102",
-    "type": "Text", 
-    "attributeValue":"This is me"
+    "name": "Attooof",
+    "type": "Boolean", 
+    "attributeValue":false
 }
 
 ###
@@ -19,9 +19,23 @@ POST http://localhost/api/product-types HTTP/1.1
 content-type: application/json
 
 {
-    "name": "Type101",
-    "attributes":[2,4]
+    "name": "Type103",
+    "attributes":[1,2]
 }
 
 ### Get product types
 GET http://localhost/api/product-types HTTP/1.1
+
+
+### Get ALL products
+GET http://localhost/api/products HTTP/1.1
+
+### Create Product
+POST http://localhost/api/products HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Product0122",
+    "productType_id":3,
+    "assignedAttributes": [1,2]
+}
