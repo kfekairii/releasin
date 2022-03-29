@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Models
+
+model Product {
+  id                 Int      @id @default(autoincrement())
+  name               String   @unique
+  created_at         DateTime @default(now())
+  productType_id     Int
+  assignedAttributes Int[]
+}
+
+model ProductType {
+  id         Int      @id @default(autoincrement())
+  name       String   
+  created_at DateTime @default(now())
+  attributes Attribute[]
+}
+
+model Attribute {
+  id                Int                   @id @default(autoincrement())
+  name              String                @unique
+  type              AttributeValueOptions
+  attributeValue_id Int
+
+  productType ProductType? @relation(fields: [productType_id],references: [id])
+  productType_id Int?
+}
+
+model AssignedAttribute {
+  id                Int @id @default(autoincrement())
+  attributeValue_id Int
+}
+
+model AttributeValue {
+  id      Int       @id @default(autoincrement())
+  name    String[]
+  boolean Boolean?
+  date    DateTime?
+}
+
+enum AttributeValueOptions {
+  Text
+  Boolean
+  Date
+  Select
+  Multiselect
+}
