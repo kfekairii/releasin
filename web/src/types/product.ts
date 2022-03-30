@@ -11,12 +11,18 @@ export interface IAssignedAttributes {
   product_id?: number;
   attributeValue: IAttributeValue;
 }
+export type AttributeTypes =
+  | "Text"
+  | "Boolean"
+  | "Date"
+  | "Select"
+  | "Multiselect";
 
 export interface IAttributes {
   id?: number;
   name?: string;
-  type?: "Text" | "Boolean" | "Date" | "Select" | "Multiselect";
-  attributeValue_id?: number;
+  type?: AttributeTypes;
+  attributeValue?: IAttributeValue;
 }
 export interface IProductType {
   id?: number;

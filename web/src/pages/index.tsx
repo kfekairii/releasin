@@ -5,27 +5,11 @@ import Head from "next/head";
 import { IProduct, IProductType } from "../types/product";
 
 import { useEffect, useState } from "react";
-import useSWR from "swr";
 import { getProducts } from "../api/products";
 
 const Home: NextPage = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [productsLoading, setProductsLoading] = useState(false);
-
-  const productsDatasource: IProduct[] = [
-    {
-      id: 1,
-      name: "Product Name",
-      assignedAttributes: [
-        { attributeValue: { name: ["my Name", "Ouuf"], id: 1 } },
-        { attributeValue: { boolean: true, id: 2 } },
-      ],
-      productType: {
-        name: "Product type",
-        attributes: [{ type: "Text" }],
-      },
-    },
-  ];
 
   const columns = [
     {
@@ -50,27 +34,6 @@ const Home: NextPage = () => {
         );
       },
     },
-    // {
-    //   title: "Attributes",
-    //   dataIndex: "assignedAttributes",
-    //   key: "attributes",
-    //   render: (assignedAttributes: IAssignedAttributes[]) => {
-    //     return (
-    //       <>
-    //         {assignedAttributes.map(({ attributeValue }) => {
-    //           const { boolean, date, name } = attributeValue;
-    //           if (name) {
-    //             return <Tag key={attributeValue.id}>{name}</Tag>;
-    //           } else if (date) {
-    //             return <Tag key={attributeValue.id}>{date}</Tag>;
-    //           } else {
-    //             <Tag key={attributeValue.id}>{boolean}</Tag>;
-    //           }
-    //         })}
-    //       </>
-    //     );
-    //   },
-    // },
   ];
 
   // Handlers
@@ -87,6 +50,7 @@ const Home: NextPage = () => {
     };
     fetch();
   }, []);
+
   return (
     <div>
       <Head>

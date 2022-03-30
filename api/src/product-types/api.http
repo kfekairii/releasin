@@ -4,9 +4,9 @@ POST http://localhost/api/product-types/attributes HTTP/1.1
 content-type: application/json
 
 {
-    "name": "Attooof",
-    "type": "Boolean", 
-    "attributeValue":false
+    "name": "Attooof101",
+    "type": "Text", 
+    "attributeValue":"hello"
 }
 
 ###
@@ -19,8 +19,8 @@ POST http://localhost/api/product-types HTTP/1.1
 content-type: application/json
 
 {
-    "name": "Type103",
-    "attributes":[1,2]
+    "name": "Type101",
+    "attributes":[1]
 }
 
 ### Get product types
@@ -35,7 +35,7 @@ POST http://localhost/api/products HTTP/1.1
 content-type: application/json
 
 {
-    "name": "Product0122",
-    "productType_id":3,
-    "assignedAttributes": [1,2]
+    "name": "Product02",
+    "productType_id":2,
+    "assignedAttributes": [1]
 }

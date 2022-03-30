@@ -55,11 +55,9 @@ export class ProductTypesService {
   }
 
   async findAllAttributes() {
-    return await this.prismaService.$queryRaw`
-      SELECT * FROM "Attribute"
-      JOIN "AttributeValue"
-      ON "Attribute"."attributeValue_id" = "AttributeValue".id
-    `;
+    return await this.prismaService.attribute.findMany({
+      include: { attributeValue: true },
+    });
   }
 
   // Helper Function

@@ -55,22 +55,22 @@ function Layout({ children }: any) {
           <Menu.Item
             key="/"
             style={{
-              fontSize: 20,
+              fontSize: 18,
               margin: 0,
               marginTop: 12,
               backgroundColor: "transparent",
             }}
-            icon={<HomeOutlined style={{ fontSize: 22 }} />}
+            icon={<HomeOutlined style={{ fontSize: 20 }} />}
           >
-            <Link href="/">Accueil</Link>
+            <Link href="/">Products</Link>
           </Menu.Item>
 
           <Menu.Item
             key="/products-config"
-            style={{ fontSize: 20, margin: 0, backgroundColor: "transparent" }}
-            icon={<DesktopOutlined style={{ fontSize: 22 }} />}
+            style={{ fontSize: 18, margin: 0, backgroundColor: "transparent" }}
+            icon={<DesktopOutlined style={{ fontSize: 20 }} />}
           >
-            <Link href="/products-config">Config</Link>
+            <Link href="/products-config">Configs</Link>
           </Menu.Item>
         </Menu>
       </Sider>
