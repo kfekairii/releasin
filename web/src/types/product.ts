@@ -18,6 +18,14 @@ export type AttributeTypes =
   | "Select"
   | "Multiselect";
 
+export enum AttributeTypesEnum {
+  Text = "Text",
+  Boolean = "Boolean",
+  Date = "Date",
+  Select = "Select",
+  Multiselect = "Multiselect",
+}
+
 export interface IAttributes {
   id?: number;
   name?: string;

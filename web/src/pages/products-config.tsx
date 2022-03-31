@@ -8,8 +8,15 @@ import {
   IProductType,
 } from "../types/product";
 import { getAttributes, getProductTypes } from "../api/products";
+import { FormikHelpers } from "formik";
+import AttributesModal from "../containers/AttributesModal";
 
 function ProductsConfig() {
+  // Attributes state
+  const [openAttributeModal, setOpenAttributeModal] = useState(false);
+  const [confirmAddAttributesLoading, setConfirmAddAttributesLoading] =
+    useState(false);
+
   // Data State
   const [productTypes, setProductTypes] = useState<IProductType[]>([]);
   const [productsAttributes, setProductsAttributes] = useState<IAttributes[]>(
@@ -89,7 +96,6 @@ function ProductsConfig() {
     },
   ];
 
-  // Handlers
   useEffect(() => {
     const fetch = async () => {
       try {
@@ -104,6 +110,16 @@ function ProductsConfig() {
     };
     fetch();
   }, []);
+
+  // Handlers
+  // Attribute Handlers
+
+  const handleAddAttribute = (
+    values: IAttributes,
+    formikHelpers: FormikHelpers<IAttributes>
+  ) => {
+    console.log(values);
+  };
 
   return (
     <>
@@ -121,20 +137,42 @@ function ProductsConfig() {
               </Button>,
             ]}
           />
-          <Table dataSource={productTypes} columns={productTypeColumns} />
+          <Table
+            dataSource={productTypes}
+            columns={productTypeColumns}
+            loading={loading}
+          />
         </div>
         <div className="configs__product-attributes">
           <PageHeader
             title="Product Type Attributes"
             subTitle="Manage product type attributes"
             extra={[
-              <Button key={0} type="primary" icon={<PlusOutlined />}>
+              <Button
+                key={0}
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={() => setOpenAttributeModal(true)}
+              >
                 Add
               </Button>,
             ]}
           />
-          <Table dataSource={productsAttributes} columns={attributesColumns} />
+          <Table
+            dataSource={productsAttributes}
+            columns={attributesColumns}
+            loading={loading}
+          />
         </div>
+
+        {openAttributeModal && (
+          <AttributesModal
+            visible={openAttributeModal}
+            onOk={handleAddAttribute}
+            onCancel={() => setOpenAttributeModal(false)}
+            confirmLoading={confirmAddAttributesLoading}
+          />
+        )}
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 services:
   nginx:
     image: nginx:stable-alpine
@@ -9,17 +9,17 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - 80:80
-      
+
   api:
     image: mrp_api:1.0.0-dev
     build:
       dockerfile: Dockerfile
       context: ./api/.
-      # will build only the development stage 
+      # will build only the development stage
       target: development
     volumes:
       - ./api:/app
-      - ./app/node_modules
+      - api_node:/app/node_modules
     command: yarn start:migrate:dev
     depends_on:
       - postgres
@@ -29,17 +29,17 @@ services:
       PORT: 3001
     ports:
       - 3001:3001
-  
+
   web:
     image: mrp_web:1.0.0-dev
     build:
       dockerfile: Dockerfile
       context: ./web/.
-      # will build only the development stage 
+      # will build only the development stage
       target: development
     volumes:
       - ./web:/app
-      - ./app/node_modules
+      - web_node:/app/node_modules
     command: yarn dev
 
     depends_on:
@@ -48,7 +48,7 @@ services:
       PORT: 3000
     ports:
       - 3000:3000
-  
+
   postgres:
     image: postgres:12.10-alpine
     environment:
@@ -59,7 +59,7 @@ services:
       - database:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    
+
   pgadmin:
     image: dpage/pgadmin4
     environment:
@@ -71,3 +71,5 @@ services:
       - "5050:80"
 volumes:
   database:
+  api_node:
+  web_node:
