@@ -7,14 +7,24 @@ import {
   IAttributeValue,
   IProductType,
 } from "../types/product";
-import { getAttributes, getProductTypes } from "../api/products";
+import {
+  createAttribute,
+  createProductType,
+  getAttributes,
+  getProductTypes,
+} from "../api/products";
 import { FormikHelpers } from "formik";
 import AttributesModal from "../containers/AttributesModal";
+import ProductTypesModal from "../containers/ProductTypesModal";
 
 function ProductsConfig() {
   // Attributes state
   const [openAttributeModal, setOpenAttributeModal] = useState(false);
   const [confirmAddAttributesLoading, setConfirmAddAttributesLoading] =
+    useState(false);
+
+  const [openProductTypesModal, setOpenProductTypesModal] = useState(false);
+  const [confirmAddProductTypesLoading, setConfirmAddProductTypesLoading] =
     useState(false);
 
   // Data State
@@ -36,7 +46,7 @@ function ProductsConfig() {
       key: "name",
     },
     {
-      title: "Type",
+      title: "Attributes",
       dataIndex: "attributes",
       key: "type",
       width: "40%",
@@ -112,13 +122,42 @@ function ProductsConfig() {
   }, []);
 
   // Handlers
+
+  // Product Typess
+  const handleAddProductType = async (
+    values: IProductType,
+    formikHelpers: FormikHelpers<IAttributes>
+  ) => {
+    try {
+      setConfirmAddProductTypesLoading(true);
+      await createProductType(values);
+      setProductTypes(await getProductTypes());
+      setOpenProductTypesModal(false);
+      setConfirmAddProductTypesLoading(false);
+      message.success("Product Type created succesfully");
+    } catch (err: any) {
+      setConfirmAddProductTypesLoading(false);
+      message.error("Oops..!", 3);
+    }
+  };
   // Attribute Handlers
 
-  const handleAddAttribute = (
+  const handleAddAttribute = async (
     values: IAttributes,
     formikHelpers: FormikHelpers<IAttributes>
   ) => {
-    console.log(values);
+    try {
+      setConfirmAddAttributesLoading(true);
+      await createAttribute(values);
+      formikHelpers.resetForm();
+      setProductsAttributes(await getAttributes());
+      setConfirmAddAttributesLoading(false);
+      setOpenAttributeModal(false);
+      message.success("Attribute created succesfully");
+    } catch (err: any) {
+      setConfirmAddAttributesLoading(false);
+      message.error("Oopss", 3);
+    }
   };
 
   return (
@@ -132,7 +171,12 @@ function ProductsConfig() {
             title="Product Types"
             subTitle="Manage product types"
             extra={[
-              <Button key={0} type="primary" icon={<PlusOutlined />}>
+              <Button
+                key={0}
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={() => setOpenProductTypesModal(true)}
+              >
                 Add
               </Button>,
             ]}
@@ -171,6 +215,15 @@ function ProductsConfig() {
             onOk={handleAddAttribute}
             onCancel={() => setOpenAttributeModal(false)}
             confirmLoading={confirmAddAttributesLoading}
+          />
+        )}
+        {openProductTypesModal && (
+          <ProductTypesModal
+            visible={openProductTypesModal}
+            onOk={handleAddProductType}
+            onCancel={() => setOpenProductTypesModal(false)}
+            confirmLoading={confirmAddProductTypesLoading}
+            productsAttributes={productsAttributes}
           />
         )}
       </div>

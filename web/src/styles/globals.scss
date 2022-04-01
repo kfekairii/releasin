@@ -1,4 +1,6 @@
 @import "./pages/pages.scss";
+@import "./components/components.scss";
+
 html,
 body {
   padding: 0;
@@ -15,4 +17,21 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+.sider-overlay{
+  position: relative;
+  transition: all 1s ease-in-out;
+  &--show{
+   &::after{
+     content: "";
+     position: absolute;
+     width: 100%;
+     height: 100%;
+     left: 0;
+     top:0;
+     background-color: #051d3321;
+    }
+  }
+
 }

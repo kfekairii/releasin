@@ -44,8 +44,7 @@ export class ProductsService {
     } catch (e) {
       if (e instanceof PrismaClientKnownRequestError) {
         if ((e.code = 'p2002')) {
-          console.log(e.meta);
-          throw new BadRequestException('Name already exists');
+          throw new BadRequestException('Already exists');
         }
       } else if (e instanceof BadRequestException) {
         throw e;

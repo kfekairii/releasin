@@ -45,5 +45,6 @@ export interface IProduct {
   name?: string;
   created_at?: Date;
   productType?: IProductType;
+  productType_id?: number;
   assignedAttributes?: IAssignedAttributes[];
 }

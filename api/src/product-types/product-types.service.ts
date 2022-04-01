@@ -24,7 +24,7 @@ export class ProductTypesService {
 
   async findAll() {
     return await this.prismaService.productType.findMany({
-      include: { attributes: true },
+      include: { attributes: { include: { productType: true } } },
     });
   }
 

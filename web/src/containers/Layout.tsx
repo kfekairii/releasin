@@ -1,4 +1,4 @@
-import React, { Children, createElement, useState } from "react";
+import React, { Children, createElement, useEffect, useState } from "react";
 import { Menu, Layout as AntdLayout, Dropdown, Button, Typography } from "antd";
 // import { Link } from "react-router-dom";
 import {
@@ -11,20 +11,45 @@ import {
 } from "@ant-design/icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useMediaQuery } from "react-responsive";
 
 const { Header, Content, Sider } = AntdLayout;
 
 function Layout({ children }: any) {
   // Page State
+  const handleMediaQueryChange = (matches: boolean) => {
+    if (matches) {
+      setHideSider(true);
+    } else {
+      setHideSider(false);
+    }
+    setIsSmallScreen(matches);
+  };
+
   const router = useRouter();
-  const [collapsed, setCollapsed] = useState(false); // Main Drawer state
+  const isSmalScreenInitialState = useMediaQuery(
+    { maxWidth: 1024 },
+    undefined,
+    handleMediaQueryChange
+  );
+
+  const [collapsed, setCollapsed] = useState(isSmalScreenInitialState); // Main Drawer state
+  const [hideSider, setHideSider] = useState(isSmalScreenInitialState); // Main Drawer state
+
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+
   return (
     <AntdLayout>
       <Sider
         trigger={null}
         collapsible
         collapsed={collapsed}
-        style={{ minHeight: "100vh" }}
+        style={{
+          minHeight: "100vh",
+          display: hideSider ? "none" : "block",
+          position: isSmallScreen ? "absolute" : "relative",
+          zIndex: 1000,
+        }}
         theme="light"
         className="shadow"
       >
@@ -38,6 +63,20 @@ function Layout({ children }: any) {
             backgroundColor: "#00172F",
           }}
         >
+          {isSmallScreen &&
+            createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+              className: "",
+              style: { color: "#f0f0f0", fontSize: 22 },
+              onClick: () =>
+                setCollapsed((prevState) => {
+                  if (isSmallScreen) {
+                    if (hideSider) {
+                      setHideSider(false);
+                      return true;
+                    } else return !prevState;
+                  } else return !prevState;
+                }),
+            })}
           {!collapsed && (
             <Typography.Title
               level={4}
@@ -86,8 +125,16 @@ function Layout({ children }: any) {
         >
           {createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
             className: "",
-            style: { color: "#f0f0f0", fontSize: 22 },
-            onClick: () => setCollapsed((prevState) => !prevState),
+            style: { color: "#f0f0f0", fontSize: 22, marginLeft: 24 },
+            onClick: () =>
+              setCollapsed((prevState) => {
+                if (isSmallScreen) {
+                  if (hideSider) {
+                    setHideSider(false);
+                    return true;
+                  } else return !prevState;
+                } else return !prevState;
+              }),
           })}
           <div style={{ flex: 1 }} />
 
@@ -114,7 +161,19 @@ function Layout({ children }: any) {
             username
           </Typography.Text>
         </Header>
-        <Content>{children}</Content>
+        <Content
+          className={`sider-overlay ${
+            !hideSider && isSmallScreen ? "sider-overlay--show" : ""
+          }`}
+          onClick={() => {
+            if (isSmallScreen) {
+              setCollapsed(true);
+              setHideSider(true);
+            }
+          }}
+        >
+          {children}
+        </Content>
       </AntdLayout>
     </AntdLayout>
   );

@@ -1,7 +1,8 @@
-import { Form, Input, Select } from "antd";
+import { Form, Input, Select, DatePicker } from "antd";
 import Modal from "antd/lib/modal/Modal";
 import { FormikHelpers, useFormik } from "formik";
-import React from "react";
+import React, { memo } from "react";
+import EditableTagGroup from "../components/EditableTagGroup";
 import {
   IAttributes,
   AttributeTypes,
@@ -19,12 +20,12 @@ interface ModalProps {
   onCancel: () => void;
   confirmLoading?: boolean;
 }
-function AttributesModal({
+const AttributesModal = ({
   visible,
   onOk,
   onCancel,
   confirmLoading,
-}: ModalProps) {
+}: ModalProps) => {
   // page state
 
   const formik = useFormik<IAttributes>({
@@ -39,6 +40,52 @@ function AttributesModal({
     formik.resetForm();
     onCancel();
   };
+
+  const getComponentByAttributeType = (type?: AttributeTypes) => {
+    switch (type) {
+      case "Text":
+        return (
+          <Input
+            name="attributeValue"
+            onChange={formik.handleChange}
+            placeholder="Enter Attribute name"
+          />
+        );
+      case "Boolean":
+        return (
+          <Select
+            onChange={(value) => formik.setFieldValue("attributeValue", value)}
+          >
+            <Option value={true}>True</Option>
+            <Option value={false}>False</Option>
+          </Select>
+        );
+      case "Date":
+        return (
+          <DatePicker
+            name="attributeValue"
+            onChange={(value) =>
+              formik.setFieldValue("attributeValue", value?.toISOString())
+            }
+          />
+        );
+      case "Select":
+      case "Multiselect":
+        return (
+          <EditableTagGroup
+            handleChange={(tags: string[]) => {
+              formik.setFieldValue("attributeValue", tags);
+            }}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
+  const attributeValueComponent = getComponentByAttributeType(
+    formik.values.type
+  );
 
   return (
     <Modal
@@ -57,7 +104,12 @@ function AttributesModal({
           />
         </Form.Item>
         <Form.Item label="Type">
-          <Select onChange={(value) => formik.setFieldValue("type", value)}>
+          <Select
+            onChange={(value) => {
+              formik.setFieldValue("type", value);
+              formik.setFieldValue("attributeValue", undefined);
+            }}
+          >
             {Object.keys(AttributeTypesEnum)?.map((op, i) => (
               <Option key={i} value={op}>
                 {op}
@@ -65,16 +117,12 @@ function AttributesModal({
             ))}
           </Select>
         </Form.Item>
+        {attributeValueComponent && (
+          <Form.Item label="Value">{attributeValueComponent}</Form.Item>
+        )}
       </Form>
-      <Form.Item label="Value">
-        <Input
-          name="attributeValue"
-          onChange={formik.handleChange}
-          placeholder="Enter Attribute name"
-        />
-      </Form.Item>
     </Modal>
   );
-}
+};
 
-export default AttributesModal;
+export default memo(AttributesModal);

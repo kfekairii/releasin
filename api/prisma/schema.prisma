@@ -23,9 +23,7 @@ model ProductType {
   name         String
   created_at   DateTime    @default(now())
   attributes   Attribute[] @relation()
-  attribute_id Int?
-
-
+  
   Product Product[]
 }
 
@@ -36,8 +34,8 @@ model Attribute {
   attributeValue    AttributeValue?       @relation(fields: [attributeValue_id], references: [id])
   attributeValue_id Int?                  @unique
 
-  productType   ProductType? @relation(fields: [productTypeId], references: [id])
-  productTypeId Int?
+  productType   ProductType[]
+ 
 }
 
 model AssignedAttribute {

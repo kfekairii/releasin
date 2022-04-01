@@ -5,11 +5,18 @@ import Head from "next/head";
 import { IProduct, IProductType } from "../types/product";
 
 import { useEffect, useState } from "react";
-import { getProducts } from "../api/products";
+import { createProduct, getProducts, getProductTypes } from "../api/products";
+import ProductsModal from "../containers/ProductsModal";
+import { FormikHelpers } from "formik";
 
 const Home: NextPage = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
+  const [productTypes, setProductTypes] = useState<IProductType[]>([]);
+
   const [productsLoading, setProductsLoading] = useState(false);
+  const [openProductsModal, setOpenProductsModal] = useState(false);
+  const [confirmAddProductLoading, setConfirmAddProductLoading] =
+    useState(false);
 
   const columns = [
     {
@@ -36,12 +43,12 @@ const Home: NextPage = () => {
     },
   ];
 
-  // Handlers
   useEffect(() => {
     const fetch = async () => {
       try {
         setProductsLoading(true);
         setProducts(await getProducts());
+        setProductTypes(await getProductTypes());
         setProductsLoading(false);
       } catch (err) {
         setProductsLoading(false);
@@ -51,6 +58,23 @@ const Home: NextPage = () => {
     fetch();
   }, []);
 
+  // Handlers
+  const handleAddProduct = async (
+    values: IProduct,
+    formikHelpers: FormikHelpers<IProduct>
+  ) => {
+    try {
+      setConfirmAddProductLoading(true);
+      await createProduct(values);
+      setProducts(await getProducts());
+      setOpenProductsModal(false);
+      setConfirmAddProductLoading(false);
+      message.success("Product Type created succesfully");
+    } catch (err: any) {
+      setConfirmAddProductLoading(false);
+      message.error("Oops..!", 3);
+    }
+  };
   return (
     <div>
       <Head>
@@ -64,7 +88,12 @@ const Home: NextPage = () => {
           title="Products"
           subTitle="Manage your products"
           extra={[
-            <Button key={0} type="primary" icon={<PlusOutlined />}>
+            <Button
+              key={0}
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => setOpenProductsModal(true)}
+            >
               Add
             </Button>,
           ]}
@@ -77,6 +106,16 @@ const Home: NextPage = () => {
           columns={columns}
         />
       </main>
+
+      {openProductsModal && (
+        <ProductsModal
+          visible={openProductsModal}
+          onOk={handleAddProduct}
+          onCancel={() => setOpenProductsModal(false)}
+          confirmLoading={confirmAddProductLoading}
+          productTypes={productTypes}
+        />
+      )}
     </div>
   );
 };

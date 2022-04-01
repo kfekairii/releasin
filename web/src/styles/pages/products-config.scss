@@ -5,12 +5,12 @@
 
     &__product-types{
         background-color: #fff;
-        height: 70vh;
+        min-height: 70vh;
     }
 
     &__product-attributes{
         margin-top: 2rem;
         background-color: #fff;
-        height: 70vh;
-    }
+        min-height: 70vh;
+    } 
 }
