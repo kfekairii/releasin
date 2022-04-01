@@ -11,7 +11,7 @@ services:
       - 80:80
   
   api:
-    image: mrp_api:1.0.0
+    image: releasin_api:1.0.0
     build:
       dockerfile: Dockerfile
       context: ./api/.
@@ -20,13 +20,13 @@ services:
     depends_on:
       - postgres
     environment:
-      DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/mrp_db?schema=public"
+      DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/releasin_db?schema=public"
       PORT: 3001
     ports:
       - 3001:3001
   
   web:
-    image: mrp_web:1.0.0
+    image: releasin_web:1.0.0
     build:
       dockerfile: Dockerfile
       context: ./web/.
@@ -44,7 +44,7 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
-      POSTGRES_DB: mrp_db
+      POSTGRES_DB: releasin_db
     volumes:
       - database:/var/lib/postgresql/data
     ports:
@@ -53,8 +53,8 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: kfekairi@digitrans.link
-      PGADMIN_DEFAULT_PASSWORD: 441257
+      PGADMIN_DEFAULT_EMAIL: admin@digitrans.link
+      PGADMIN_DEFAULT_PASSWORD: admin
     depends_on:
       - postgres
     ports:
