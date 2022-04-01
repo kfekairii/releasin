@@ -1,1 +1,1 @@
-export const BASE_URL: string = "http://server/api";
+export const BASE_URL: string = "https://digitrans.link/api";
