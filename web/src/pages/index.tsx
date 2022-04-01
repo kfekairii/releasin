@@ -80,10 +80,6 @@ const Home: NextPage = () => {
       <Head>
         <title>Releasin Assignment</title>
         <meta name="description" content="Releasin Assignment" />
-        <meta
-          httpEquiv="Content-Security-Policy"
-          content="upgrade-insecure-requests"
-        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
