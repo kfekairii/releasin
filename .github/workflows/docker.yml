@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: MRP Project CI
+name: Digitrans Project CI
 
 # Controls when the workflow will run
 on:
@@ -34,14 +34,14 @@ jobs:
       # Runs a single command using the runners shell
       - name: Build API
         run: |
-          docker build ./api -t digitrans/mrp_api:1.0.0
+          docker build ./api -t digitrans/releasin_api:1.0.0
       - name: Build WEB
         run: |
-          docker build ./web -t digitrans/mrp_web:1.0.0
+          docker build ./web -t digitrans/releasin_web:1.0.0
       - name: Docker Push
         run: |
-          docker push digitrans/mrp_api:1.0.0
-          docker push digitrans/mrp_web:1.0.0
+          docker push digitrans/releasin_api:1.0.0
+          docker push digitrans/releasin_web:1.0.0
           
           
 
