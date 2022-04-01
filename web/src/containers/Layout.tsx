@@ -33,12 +33,23 @@ function Layout({ children }: any) {
     handleMediaQueryChange
   );
 
-  const [collapsed, setCollapsed] = useState(isSmalScreenInitialState); // Main Drawer state
-  const [hideSider, setHideSider] = useState(isSmalScreenInitialState); // Main Drawer state
-
+  const [collapsed, setCollapsed] = useState(false); // Main Drawer state
+  const [hideSider, setHideSider] = useState(false); // Main Drawer state
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  return (
+  useEffect(() => {
+    setCollapsed(isSmalScreenInitialState);
+    setHideSider(isSmalScreenInitialState);
+    setIsSmallScreen(isSmalScreenInitialState);
+    setLoading(false);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return loading ? (
+    <p>loading..</p>
+  ) : (
     <AntdLayout>
       <Sider
         trigger={null}
@@ -85,7 +96,7 @@ function Layout({ children }: any) {
                 margin: "auto",
               }}
             >
-              HMSystem
+              Releasin
             </Typography.Title>
           )}
         </div>
